@@ -1,0 +1,182 @@
+using System;
+using System.Windows.Forms;
+using System.Threading;
+
+
+namespace Chart_test
+{
+    public partial class Form1 : Form
+    {
+        public delegate void myDelegate();
+         
+        Random ranX = new Random();
+        Random ranY = new Random();
+
+        Thread t1;
+        Thread t2;
+        Thread t3;
+        Thread t4;
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            chart1.ChartAreas[0].AxisX.Minimum = 0;
+            chart1.ChartAreas[0].AxisX.Maximum = 100;
+            chart1.ChartAreas[0].AxisY.Minimum = 0;
+            chart1.ChartAreas[0].AxisY.Maximum = 100;
+
+            chart2.ChartAreas[0].AxisX.Minimum = 0;
+            chart2.ChartAreas[0].AxisX.Maximum = 100;
+            chart2.ChartAreas[0].AxisY.Minimum = 0;
+            chart2.ChartAreas[0].AxisY.Maximum = 100;
+
+            chart3.ChartAreas[0].AxisX.Minimum = 0;
+            chart3.ChartAreas[0].AxisX.Maximum = 100;
+            chart3.ChartAreas[0].AxisY.Minimum = 0;
+            chart3.ChartAreas[0].AxisY.Maximum = 100;
+
+            chart4.ChartAreas[0].AxisX.Minimum = 0;
+            chart4.ChartAreas[0].AxisX.Maximum = 100;
+            chart4.ChartAreas[0].AxisY.Minimum = 0;
+            chart4.ChartAreas[0].AxisY.Maximum = 100;
+        }
+
+        private void chart1_thread()
+        {
+
+            chart1.Series[0].Points.AddXY(ranX.Next(0, 100), ranY.Next(0, 100));
+              
+        }
+
+        private void chart2_thread()
+        {
+            chart2.Series[0].Points.AddXY(ranX.Next(0, 100), ranY.Next(0, 100));
+        }
+
+        private void chart3_thread()
+        {
+            chart3.Series[0].Points.AddXY(ranX.Next(0, 100), ranY.Next(0, 100));
+        }
+
+        private void chart4_thread()
+        {
+            chart4.Series[0].Points.AddXY(ranX.Next(0, 100), ranY.Next(0, 100));
+        }
+
+        private void showChart1()
+        {
+            try
+            {
+                while (true)
+                {
+                    myDelegate md = new myDelegate(chart1_thread);
+                    Invoke(md);
+                    Thread.Sleep(500);
+                    
+                }
+            }
+            catch
+            {
+                t1.Abort();
+                //chart1.Series[0].Points.Clear();
+            }
+        }
+
+        private void showChart2()
+        {
+            try
+            {
+                while (true)
+                {
+                    myDelegate md = new myDelegate(chart2_thread);
+                    Invoke(md);
+                    Thread.Sleep(500);
+
+                }
+            }
+            catch
+            {
+                t2.Abort();
+                //chart1.Series[0].Points.Clear();
+            }
+        }
+
+        private void showChart3()
+        {
+            try
+            {
+                while (true)
+                {
+                    myDelegate md = new myDelegate(chart3_thread);
+                    Invoke(md);
+                    Thread.Sleep(500);
+
+                }
+            }
+            catch
+            {
+                t3.Abort();
+                //chart1.Series[0].Points.Clear();
+            }
+        }
+
+        private void showChart4()
+        {
+            try
+            {
+                while (true)
+                {
+                    myDelegate md = new myDelegate(chart4_thread);
+                    Invoke(md);
+                    Thread.Sleep(500);
+
+                }
+            }
+            catch
+            {
+                t4.Abort();
+                //chart1.Series[0].Points.Clear();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            ThreadStart ts1 = new ThreadStart(showChart1);
+            ThreadStart ts2 = new ThreadStart(showChart2);
+            ThreadStart ts3 = new ThreadStart(showChart3);
+            ThreadStart ts4 = new ThreadStart(showChart4);
+
+            t1 = new Thread(ts1);
+            t2 = new Thread(ts2);
+            t3 = new Thread(ts3);
+            t4 = new Thread(ts4);
+
+            t1.Start();
+            t2.Start();
+            t3.Start();
+            t4.Start();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            t1.Abort();
+            t2.Abort();
+            t3.Abort();
+            t4.Abort();
+
+            chart1.Series[0].Points.Clear();
+            chart2.Series[0].Points.Clear();
+            chart3.Series[0].Points.Clear();
+            chart4.Series[0].Points.Clear();
+
+            chart1.Series[0].Points.AddXY(0, 0);
+            chart2.Series[0].Points.AddXY(0, 0);
+            chart3.Series[0].Points.AddXY(0, 0);
+            chart4.Series[0].Points.AddXY(0, 0);
+
+        }
+    }
+}
